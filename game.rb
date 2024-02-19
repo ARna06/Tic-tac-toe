@@ -56,7 +56,7 @@ class GameLogics
 
   def columnAny
     for i in 0...3
-      if (@game_array.at(i) === @game_array.at(i+3)) && (@game_array.at(i+3) === game_array.at(i+6))
+      if (@game_array.at(i) === @game_array.at(i+3)) && (@game_array.at(i+3) === @game_array.at(i+6))
         @@columnTest.push(true)
       else
         @@columnTest.push(false)
