@@ -56,7 +56,7 @@ class GameLogics
 
   def columnAny
     for i in 0...3
-      if (@game_array[i] === @game_array[i+3]) && (@game_array[i+3] === game_array[i+6])
+      if (@game_array.at(i) === @game_array.at(i+3)) && (@game_array.at(i+3) === game_array.at(i+6))
         @@columnTest.push(true)
       else
         @@columnTest.push(false)
@@ -77,7 +77,7 @@ class GameLogics
   end
 
   def diagonalAny
-    if ((@game_array[0]==@game_array[4])&&(@game_array[4]==@game_array[8]))||((@game_array[2]==@game_array[4])&&(@game_array[4]==@game_array[6]))
+    if ((@game_array.at(0)==@game_array.at(4))&&(@game_array.at(4)==@game_array.at(8)))||((@game_array.at(2)==@game_array.at(4))&&(@game_array.at(4)==@game_array.at(6)))
       @@diagonalTest.push(true)
     else
       @@diagonalTest.push(false)
