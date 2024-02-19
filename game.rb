@@ -1,5 +1,6 @@
 class GameZone
-  attr_accessor :playerMove
+
+  attr_accessor :lastValue
 
   @@board = "1|2|3\n4|5|6\n7|8|9\n"
   @@order = 0
@@ -18,8 +19,10 @@ class GameZone
 
     if @@order.even?
       @@board.sub!(@playerMove, "O")
+      @lastValue = "O"
     else
       @@board.sub!(@playerMove, "X")
+      @lastValue = "X"
     end
     @@order += 1
 
@@ -29,24 +32,89 @@ class GameZone
     puts "The current situation of the board is \n"
     puts "#{@@board}"
   end
+
+  def returnBoard
+    return "#{@@board}"
+  end
+
+  def moves
+    @@no_repeater
+  end
 end
 
 class GameLogics
-  attr_accessor :board
+
+  @@columnTest = []
+  @@rowTest = []
+  @@diagonalTest = []
+  ROWS = [0,3,6]
 
   def initialize(board)
     @board = board
-    @game_array = @board.split(/['|', '\n']/)
+    @game_array = board.split(/['|','\n']/)
   end
 
-  def self.column
+  def columnAny
+    for i in 0...3
+      if (@game_array[i] === @game_array[i+3]) && (@game_array[i+3] === game_array[i+6])
+        @@columnTest.push(true)
+      else
+        @@columnTest.push(false)
+      end
+    end
+    @@columnTest.any?{|item| item === true}
+  end
 
+  def rowAny
+    for i in ROWS
+      if (@game_array.at(i) === @game_array.at(i+1)) && (@game_array.at(i+1) === @game_array.at(i+2))
+        @@rowTest.push(true)
+      else
+        @@rowTest.push(false)
+      end
+    end
+    @@rowTest.any?{|item| item === true}
+  end
+
+  def diagonalAny
+    if ((@game_array[0]==@game_array[4])&&(@game_array[4]==@game_array[8]))||((@game_array[2]==@game_array[4])&&(@game_array[4]==@game_array[6]))
+      @@diagonalTest.push(true)
+    else
+      @@diagonalTest.push(false)
+    end
+    @@diagonalTest.any?{|item| item === true}
   end
 end
 
-for x in 0...6
-  puts "Enter your move: "
+def decider (val1, val2, val3)
+  arr = [val1, val2, val3]
+  return arr.any? {|item| item === true}
+end
+
+puts "This is a simple implementation of tic-tac-toe in ruby"
+puts "First player uses 0 and second player uses X"
+puts "Enter move:  "
+move = gets.chomp
+situation = GameZone.new(move)
+board = situation.returnBoard
+gamePlay = situation.moves
+assessor = GameLogics.new(board)
+situation.showBoard
+
+while (!(decider(assessor.rowAny, assessor.columnAny, assessor.diagonalAny)) && (gamePlay.length < 8))
+  puts "Enter your move:  "
   move = gets.chomp
   situation = GameZone.new(move)
+  board = situation.returnBoard
+  gamePlay = situation.moves
+  assessor = GameLogics.new(board)
   situation.showBoard
+end
+
+if (gamePlay.length === 8)
+  puts "The game is a draw!"
+elsif gamePlay.length.even?
+  puts "Second player wins!"
+else
+  puts "First player wins!"
 end
